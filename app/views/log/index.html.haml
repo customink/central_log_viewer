@@ -1,0 +1,119 @@
+.top
+  %h1 Log Viewer
+  .label Listing Fields:
+  %textarea#fields
+  %input{:type => 'checkbox'}
+  Tail -f
+  %p
+  .label Query:
+  %textarea#query
+%p
+.left
+  .group
+    %h3 Applications
+    %p
+    %input{:type => 'checkbox'} rails_backend
+    %p
+    %input{:type => 'checkbox'} blanks_ordering_service
+    %p
+    %input{:type => 'checkbox'} supplier_service
+    %p
+  .group
+    %h3 Common Filters
+    %p
+    %table
+      %thead
+        %th Attribute
+        %th Value
+      %tbody
+        %tr
+          %td order_id
+          %td 20303
+        %tr
+          %td severity
+          %td info
+        %tr
+          %td log contains
+          %td
+        %tr
+          %td request start
+          %td
+        %tr
+          %td request end
+          %td
+    %p
+  .group
+    %h3 Status
+    %p
+    Last Refresh
+    %p
+    01/01/2010 11:20:21.344
+    %p
+    Total Records: 4
+.right
+  .group
+    %h3 Listing
+    %p
+    %table
+      %thead
+        %th params.id
+        %th messages.info
+        %th action
+        %th request_time
+        %th controller
+      %tbody
+        %tr
+          %td 20303
+          %td Creating order with the order model
+          %td create
+          %td 11/08/2010 12:59:47 0-500
+          %td order
+  %p
+/
+  .group
+    %h3 Detail
+    %p
+    %table
+      %thead
+        %th Attribute
+        %th Value
+      %tbody
+        %tr
+          %td _id
+          %td 4cd83a93e6efed488a000005
+        %tr
+          %td action
+          %td create
+        %tr
+          %td application_name
+          %td rails_backend
+        %tr
+          %td controller
+          %td order
+        %tr
+          %td ip
+          %td 25.12.34.5
+        %tr
+          %td messages.info
+          %td "Creating order with the order model"
+        %tr
+          %td params.action
+          %td create
+        %tr
+          %td params.controller
+          %td order
+        %tr
+          %td params.order.id
+          %td 20303
+        %tr
+          %td path
+          %td /order/create
+        %tr
+          %td request_time
+          %td 11/08/2010 12:59:47 -0500
+        %tr
+          %td runtime
+          %td 5
+        %tr
+          %td url
+          %td http://blanks_ordering_service/order/create
