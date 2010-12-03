@@ -1,13 +1,15 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.0'
+gem 'rails'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem "central_logger"
+gem "central_logger", :require => "central_logger", :path => "../central_logger"
 gem "haml"
+gem "bistro_car", :require => "bistro_car", :path => "../bistro_car"
+gem "jquery-rails"
 
 # Use unicorn as the web server
 # gem 'unicorn'
