@@ -1,22 +1,27 @@
+- content_for :log_listing do
+  = render :partial => "log_listing"
 .top
-  %h1 Log Viewer
-  .label Listing Fields:
-  %textarea#fields
-  %input{:type => 'checkbox'}
-  Tail -f
-  %p
-  .label Query:
-  %textarea#query
+  %form{ :action => 'post', :method => 'post'}
+    %h1 Log Viewer
+    .label Listing Fields:
+    %textarea#fields
+    %input{:type => "checkbox"}
+    Tail -f
+    %p
+    .label Query:
+    %textarea#query{:name => 'query'} find_one({})
+    %input#run_query{:type => "button", :value => "Run Query"}
+    %input#clear_log_listing{:type => "button", :value => "Clear"}
 %p
 .left
   .group
     %h3 Applications
     %p
-    %input{:type => 'checkbox'} rails_backend
+    %input{:type => "checkbox"} rails_backend
     %p
-    %input{:type => 'checkbox'} blanks_ordering_service
+    %input{:type => "checkbox"} blanks_ordering_service
     %p
-    %input{:type => 'checkbox'} supplier_service
+    %input{:type => "checkbox"} supplier_service
     %p
   .group
     %h3 Common Filters
@@ -54,6 +59,8 @@
   .group
     %h3 Listing
     %p
+    = yield :log_listing
+  /
     %table
       %thead
         %th params.id
