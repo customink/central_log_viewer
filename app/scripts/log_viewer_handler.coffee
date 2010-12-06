@@ -11,16 +11,9 @@ class window.LogViewerHandler
     @clear_button.bind 'click', (event) => @clear_button_clicked()
 
   query_button_clicked: ->
-    alert "query button clicked"
-    $.get(@data_url, {query: @query_input.val()}, (data) => @data_received(data)) if @query_input.val()?
+    $.get(@data_url, {query: @query_input.val()}, (data) => @data_grid.refresh_data(data)) if @query_input.val()?
 
   clear_button_clicked: ->
     alert "clear button clicked"
 
-  data_received: (data) ->
-    alert "receiving a load..."
-    alert "data: #{data}" if data?
-
-# bind event handlers to buttons
-# delegate to data grid
 # validate fields input?
