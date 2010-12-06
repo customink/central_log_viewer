@@ -30,7 +30,7 @@ class window.SimpleDataGrid
   create_handlebars_templates: ->
     # TODO: escape special chars in fields
     helpers = map_to_relative:
-                (context) => '{{' + @rel_to_msg_mapping[context] + '}}'
+                (context) => "{{#{@rel_to_msg_mapping[context]}}}"
     record_source_template = Handlebars.compile "<tr id=\"#{@rel_to_msg_mapping["id"]}\">{{#.}}<td>{{map_to_relative .}}</td>{{/.}}</tr>"
     record_source = record_source_template @fields, helpers
 
