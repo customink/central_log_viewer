@@ -1,3 +1,7 @@
+String::trimToNull = ->
+  val = $.trim(this)
+  if 0 == val.length then null else val
+
 class window.LogViewerHandler
   constructor: (listing_table_id, query_button_id, clear_button_id, fields_input_id, query_input_id, @data_url) ->
     @listing_table = $("\##{listing_table_id}")
@@ -11,7 +15,10 @@ class window.LogViewerHandler
     @clear_button.bind 'click', (event) => @clear_button_clicked()
 
   query_button_clicked: ->
-    $.get(@data_url, {query: @query_input.val()}, (data) => @data_grid.refresh_data(data)) if @query_input.val()?
+    fields = @fields_input.val().trimToNull()
+    query = @query_input.val().trimToNull()
+    if query?
+      $.get(@data_url, {query: query}, (data) => @data_grid.refresh_data(data, fields)) if @query_input.val()?
 
   clear_button_clicked: ->
     alert "clear button clicked"

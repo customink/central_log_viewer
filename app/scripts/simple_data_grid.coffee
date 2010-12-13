@@ -7,7 +7,7 @@ class window.SimpleDataGrid
     controller: "../../controller",
     ip: "../../ip",
     messages: ".",
-    "params/": "../../params/",
+    params: "../../",
     path: "../../path",
     request_time: "../../request_time",
     runtime: "../../runtime",
@@ -29,20 +29,35 @@ class window.SimpleDataGrid
 
   create_handlebars_templates: ->
     # TODO: escape special chars in fields
-    helpers = map_to_relative:
-                (context) => "{{#{@rel_to_msg_mapping[context]}}}"
-    record_source_template = Handlebars.compile "<tr id=\"#{@rel_to_msg_mapping["id"]}\">{{#.}}<td>{{map_to_relative .}}</td>{{/.}}</tr>"
-    record_source = record_source_template @fields, helpers
-
+    # TODO: get rid of double partials call
     @templates =
       header: Handlebars.compile @header_source
       data: Handlebars.compile @data_source
+      helpers:
+        map_to_relative:
+          (context) => @map_to_relative context
+      record_source: Handlebars.compile "<tr id=\"#{@rel_to_msg_mapping["id"]}\">{{#.}}<td>{{map_to_relative .}}</td>{{/.}}</tr>"
       partials:
         partials:
-          record: Handlebars.compile record_source
+          record: null
 
-  refresh_data: (@data) ->
+    @templates.partials.partials.record = @create_record_template @fields
+
+  map_to_relative: (context) ->
+    if 0 == context.indexOf("params")
+      "{{#{@rel_to_msg_mapping["params"]}#{context.replace ".", "/"}}}"
+    else
+      "{{#{@rel_to_msg_mapping[context]}}}"
+
+  create_record_template: (fields) ->
+    source = @templates.record_source fields, @templates.helpers
+    @templates.partials.partials.record = Handlebars.compile source
+
+  refresh_data: (@data, fields) ->
     if @data?
+      if fields?
+        @fields = ($.trim(f) for f in fields.split(','))
+        @create_record_template(@fields)
       @listing_table.empty()
       @listing_table.append @templates.header(@fields)
       @listing_table.append @templates.data(@data, @templates.partials)
