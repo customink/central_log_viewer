@@ -10,7 +10,7 @@ class window.LogViewerHandler
     @fields_input = $("\##{fields_input_id}")
     @query_input = $("\##{query_input_id}")
 
-    @data_grid = new SimpleDataGrid @listing_table, @fields_input.value
+    @data_grid = new SimpleDataGrid @listing_table, @fields_input.val().trimToNull()
     @query_button.bind 'click', (event) => @query_button_clicked()
     @clear_button.bind 'click', (event) => @clear_button_clicked()
 

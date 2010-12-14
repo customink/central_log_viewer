@@ -1,3 +1,6 @@
+String::splitTrim = ->
+  ($.trim f for f in this.split ',')
+
 class window.SimpleDataGrid
   default_head_data: ["id", "messages", "action", "request_time", "controller"]
   rel_to_msg_mapping:
@@ -21,8 +24,15 @@ class window.SimpleDataGrid
                     {{#fatal}}{{> record}}{{/fatal}}
                   {{/messages}}{{/.}}</tbody>'''
 
-  constructor: (@listing_table, @fields, @data) ->
-    @fields = @default_head_data unless @fields?
+  constructor: (@listing_table, fields, @data) ->
+    if fields?
+      @fields = fields.splitTrim()
+      # avoid regenerating template if fields are the same
+      @old_fields_val = fields
+    else
+      @fields = @default_head_data
+      @old_fields_val = null
+
     @create_handlebars_templates()
     @listing_table.append @templates.header(@fields)
     @listing_table.append @templates.data(@data, @templates.partials) if @data?
@@ -55,8 +65,9 @@ class window.SimpleDataGrid
 
   refresh_data: (@data, fields) ->
     if @data?
-      if fields?
-        @fields = ($.trim(f) for f in fields.split(','))
+      if fields? and fields isnt @old_fields_val
+        @old_fields_val = fields
+        @fields = fields.splitTrim()
         @create_record_template(@fields)
       @listing_table.empty()
       @listing_table.append @templates.header(@fields)
