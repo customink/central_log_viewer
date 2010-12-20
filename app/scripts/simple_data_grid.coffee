@@ -4,7 +4,7 @@ String::splitTrim = ->
 class window.SimpleDataGrid
   default_head_data: ["id", "messages", "action", "request_time", "controller"]
   rel_to_msg_mapping:
-    id: "../../_id",
+    id: "id_to_s ../../_id",
     action: "../../action",
     application_name: "../../application_name",
     controller: "../../controller",
@@ -16,13 +16,13 @@ class window.SimpleDataGrid
     runtime: "../../runtime",
     url: "../../url"
   header_source: '<thead><tr>{{#.}}<th>{{.}}</th>{{/.}}</tr></thead>'
-  data_source: '''<tbody>{{#.}}{{#messages}}
+  data_source: '''<tbody>{{#each}}{{#messages}}
                     {{#info}}{{> record}}{{/info}}
                     {{#debug}}{{> record}}{{/debug}}
                     {{#error}}{{> record}}{{/error}}
                     {{#warn}}{{> record}}{{/warn}}
                     {{#fatal}}{{> record}}{{/fatal}}
-                  {{/messages}}{{/.}}</tbody>'''
+                  {{/messages}}{{/each}}</tbody>'''
 
   constructor: (@listing_table, fields, @data) ->
     if fields?
@@ -32,6 +32,9 @@ class window.SimpleDataGrid
     else
       @fields = @default_head_data
       @old_fields_val = null
+    Handlebars.registerHelper "map_to_relative", (context, fn) => @map_to_relative(context, fn).join ''
+    #Handlebars.registerHelper "map_to_relative", (context) -> "#{context}fun"
+    Handlebars.registerHelper "id_to_s", (context) -> context.$oid
 
     @create_handlebars_templates()
     @listing_table.append @templates.header(@fields)
@@ -43,32 +46,37 @@ class window.SimpleDataGrid
     @templates =
       header: Handlebars.compile @header_source
       data: Handlebars.compile @data_source
-      helpers:
-        map_to_relative:
-          (context) => @map_to_relative context
-      record_source: Handlebars.compile "<tr id=\"#{@rel_to_msg_mapping["id"]}\">{{#.}}<td>{{map_to_relative .}}</td>{{/.}}</tr>"
-      partials:
-        partials:
-          record: null
+      record_source: Handlebars.compile '<tr id="asdf">{{#map_to_relative}}<td>{{.}}</td>{{/map_to_relative}}</tr>'
 
-    @templates.partials.partials.record = @create_record_template @fields
+    @create_record_template @fields
 
-  map_to_relative: (context) ->
-    if 0 == context.indexOf("params")
-      "{{#{@rel_to_msg_mapping["params"]}#{context.replace ".", "/"}}}"
-    else
-      "{{#{@rel_to_msg_mapping[context]}}}"
+  map_to_relative: (context, fn) ->
+    #TODO: use default ../.. for all unknown contexts
+    for f in context
+      if 0 == f.indexOf("params")
+        fn "{{#{@rel_to_msg_mapping["params"]}#{f.replace ".", "/"}}}"
+      else
+        fn "{{#{@rel_to_msg_mapping[f]}}}"
 
   create_record_template: (fields) ->
-    source = @templates.record_source fields, @templates.helpers
-    @templates.partials.partials.record = Handlebars.compile source
+    source = @templates.record_source fields
+    Handlebars.registerPartial "record", source
 
   refresh_data: (@data, fields) ->
     if @data?
-      if fields? and fields isnt @old_fields_val
-        @old_fields_val = fields
-        @fields = fields.splitTrim()
-        @create_record_template(@fields)
+      if fields isnt @old_fields_val
+        unless fields?
+          # set back to the default
+          @old_fields_val = null
+          @fields = @default_head_data
+        else
+          # new fields to deal with
+          @old_fields_val = fields
+          @fields = fields.splitTrim()
+      #TODO: does not work after compilation. Report this
+      @create_record_template @fields
       @listing_table.empty()
       @listing_table.append @templates.header(@fields)
-      @listing_table.append @templates.data(@data, @templates.partials)
+      #TODO: See how to add helper to this by inspecting
+      #@listing_table.append @templates.data(@data, @templates.partials)
+      @listing_table.append @templates.data(@data)

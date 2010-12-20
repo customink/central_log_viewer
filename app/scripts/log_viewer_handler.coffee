@@ -17,8 +17,7 @@ class window.LogViewerHandler
   query_button_clicked: ->
     fields = @fields_input.val().trimToNull()
     query = @query_input.val().trimToNull()
-    if query?
-      $.get(@data_url, {query: query}, (data) => @data_grid.refresh_data(data, fields)) if @query_input.val()?
+    $.get(@data_url, {query: query}, (data) => @data_grid.refresh_data(data, fields)) if query?
 
   clear_button_clicked: ->
     alert "clear button clicked"
