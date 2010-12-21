@@ -4,25 +4,25 @@ String::splitTrim = ->
 class window.SimpleDataGrid
   default_head_data: ["id", "messages", "action", "request_time", "controller"]
   rel_to_msg_mapping:
-    id: "id_to_s ../../_id",
-    action: "../../action",
-    application_name: "../../application_name",
-    controller: "../../controller",
-    ip: "../../ip",
-    messages: ".",
-    params: "../../",
-    path: "../../path",
-    request_time: "../../request_time",
-    runtime: "../../runtime",
-    url: "../../url"
+    id: "{{id_to_s}}",
+    action: "{{../../action}}",
+    application_name: "{{../../application_name}}",
+    controller: "{{../../controller}}",
+    ip: "{{../../ip}}",
+    messages: "{{.}}",
+    params: "{{../../",
+    path: "{{../../path}}",
+    request_time: "{{../../request_time}}",
+    runtime: "{{../../runtime}}",
+    url: "{{../../url}}"
   header_source: '<thead><tr>{{#.}}<th>{{.}}</th>{{/.}}</tr></thead>'
-  data_source: '''<tbody>{{#each}}{{#messages}}
+  data_source: '''<tbody>{{#.}}{{#messages}}
                     {{#info}}{{> record}}{{/info}}
                     {{#debug}}{{> record}}{{/debug}}
                     {{#error}}{{> record}}{{/error}}
                     {{#warn}}{{> record}}{{/warn}}
                     {{#fatal}}{{> record}}{{/fatal}}
-                  {{/messages}}{{/each}}</tbody>'''
+                  {{/messages}}{{/.}}</tbody>'''
 
   constructor: (@listing_table, fields, @data) ->
     if fields?
@@ -33,8 +33,7 @@ class window.SimpleDataGrid
       @fields = @default_head_data
       @old_fields_val = null
     Handlebars.registerHelper "map_to_relative", (context, fn) => @map_to_relative(context, fn).join ''
-    #Handlebars.registerHelper "map_to_relative", (context) -> "#{context}fun"
-    Handlebars.registerHelper "id_to_s", (context) -> context.$oid
+    Handlebars.registerHelper "id_to_s", (context, fn) -> this.__get__('../../_id')?.$oid
 
     @create_handlebars_templates()
     @listing_table.append @templates.header(@fields)
@@ -54,9 +53,9 @@ class window.SimpleDataGrid
     #TODO: use default ../.. for all unknown contexts
     for f in context
       if 0 == f.indexOf("params")
-        fn "{{#{@rel_to_msg_mapping["params"]}#{f.replace ".", "/"}}}"
+        fn "#{@rel_to_msg_mapping["params"]}#{f.replace ".", "/"}}}"
       else
-        fn "{{#{@rel_to_msg_mapping[f]}}}"
+        fn "#{@rel_to_msg_mapping[f]}"
 
   create_record_template: (fields) ->
     source = @templates.record_source fields
@@ -73,8 +72,7 @@ class window.SimpleDataGrid
           # new fields to deal with
           @old_fields_val = fields
           @fields = fields.splitTrim()
-      #TODO: does not work after compilation. Report this
-      @create_record_template @fields
+        @create_record_template @fields
       @listing_table.empty()
       @listing_table.append @templates.header(@fields)
       #TODO: See how to add helper to this by inspecting
