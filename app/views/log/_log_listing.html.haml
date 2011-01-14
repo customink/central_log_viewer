@@ -1,8 +1,8 @@
 - content_for :head do
-  = coffee_script_bundle
   = javascript_include_tag "handlebars"
+  = coffee_script_bundle
 %table#log_listing
 = javascript_tag do
   var query_url = '#{url_for(:action => "index")}';
 = coffee_script do
-  $(document).ready -> grid = new LogViewerHandler 'log_listing', 'run_query', 'clear_log_listing', 'fields', 'query', query_url
+  $(document).ready -> grid = new LogViewerHandler query_url

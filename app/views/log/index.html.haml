@@ -17,11 +17,11 @@
   .group
     %h3 Applications
     %p
-    %input{:type => "checkbox"} rails_backend
+    %input{:name => "application_filter", :type => "checkbox", :value=>"rails_backend"} rails_backend
     %p
-    %input{:type => "checkbox"} blanks_ordering_service
+    %input{:name => "application_filter", :type => "checkbox", :value=>"blanks_ordering_service"} blanks_ordering_service
     %p
-    %input{:type => "checkbox"} supplier_service
+    %input{:name => "application_filter", :type => "checkbox", :value=>"supplier_service"} supplier_service
     %p
   .group
     %h3 Common Filters
