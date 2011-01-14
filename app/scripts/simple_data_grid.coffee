@@ -33,7 +33,7 @@ class window.SimpleDataGrid
       @fields = @default_head_data
       @old_fields_val = null
     Handlebars.registerHelper "map_to_relative", (context, fn) => @map_to_relative(context, fn).join ''
-    Handlebars.registerHelper "id_to_s", (context, fn) -> this.__get__('../../_id')?.$oid
+    Handlebars.registerHelper "id_to_s", () -> this.__get__('../../_id')?.$oid
 
     @create_handlebars_templates()
     @listing_table.append @templates.header(@fields)
@@ -46,7 +46,6 @@ class window.SimpleDataGrid
       header: Handlebars.compile @header_source
       data: Handlebars.compile @data_source
       record_source: Handlebars.compile '<tr id="asdf">{{#map_to_relative}}<td>{{.}}</td>{{/map_to_relative}}</tr>'
-
     @create_record_template @fields
 
   map_to_relative: (context, fn) ->
