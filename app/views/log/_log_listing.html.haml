@@ -4,5 +4,6 @@
 %table#log_listing
 = javascript_tag do
   var query_url = '#{url_for(:action => "index")}';
+  var app_url = '#{url_for(:action => "apps")}';
 = coffee_script do
-  $(document).ready -> grid = new LogViewerHandler query_url
+  $(document).ready -> grid = new LogViewerHandler query_url, app_url
