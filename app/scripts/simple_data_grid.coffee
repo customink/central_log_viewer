@@ -16,7 +16,7 @@ class window.SimpleDataGrid
     runtime: "{{../../runtime}}",
     url: "{{../../url}}"
   header_source: '<thead><tr>{{#.}}<th>{{.}}</th>{{/.}}</tr></thead>'
-  data_source: '''<tbody>{{#.}}{{#messages}}
+  data_source: '''<tbody id="data_grid_body">{{#.}}{{#messages}}
                     {{#info}}{{> record}}{{/info}}
                     {{#debug}}{{> record}}{{/debug}}
                     {{#error}}{{> record}}{{/error}}
@@ -38,6 +38,7 @@ class window.SimpleDataGrid
     @create_handlebars_templates()
     @listing_table.append @templates.header(@fields)
     @listing_table.append @templates.data(@data, @templates.partials) if @data?
+    @record_count = 0
 
   create_handlebars_templates: ->
     # TODO: escape special chars in fields
@@ -62,9 +63,10 @@ class window.SimpleDataGrid
 
   refresh_data: (@data, fields) ->
     if @data?
+      # if nothing changed, don't recreate the record template
       if fields isnt @old_fields_val
         unless fields?
-          # set back to the default
+          # set back to the default fields because form field is empty
           @old_fields_val = null
           @fields = @default_head_data
         else
@@ -75,5 +77,5 @@ class window.SimpleDataGrid
       @listing_table.empty()
       @listing_table.append @templates.header(@fields)
       #TODO: See how to add helper to this by inspecting
-      #@listing_table.append @templates.data(@data, @templates.partials)
       @listing_table.append @templates.data(@data)
+      @record_count = $('#data_grid_body').children(0).length
