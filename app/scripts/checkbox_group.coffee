@@ -1,6 +1,4 @@
 class window.CheckboxGroup
-  #    %input{:name => "application_filter", :type => "checkbox", :value=>"rails_backend"} rails_backend
-  #  %p
   constructor: (@name, @callback) ->
     @template = Handlebars.compile("{{#values}}<p><input name=\"#{@name}\" type=\"checkbox\" value=\"{{.}}\"</input>{{.}}</p>{{/values}}")
     @div = $("##{@name}")

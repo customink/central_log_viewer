@@ -1,17 +1,17 @@
 - content_for :log_listing do
   = render :partial => "log_listing"
 .top
-  %form{ :action => 'post', :method => 'post'}
-    %h1 Log Viewer
-    .label Listing Fields:
-    %textarea#fields
-    %input{:type => "checkbox"}
-    Tail -f
-    %p
-    .label Query:
-    %textarea#query{:name => 'query'} find_one({})
-    %input#run_query{:type => "button", :value => "Run Query"}
-    %input#clear_log_listing{:type => "button", :value => "Clear"}
+  %h1 Log Viewer
+  .label Listing Fields:
+  %textarea#fields
+  %p
+  .label Query:
+  %textarea#query find_one()
+  %p
+  %input.button#run_query{:type => "button", :value => "Run Query"}
+  %input#tail{:type => "checkbox"} Tail -F
+  %input#clear_log_listing{:type => "button", :value => "Clear Listing"}
+  #progress
 %p
 .left
   .group
@@ -27,30 +27,16 @@
         %th Value
       %tbody
         %tr
-          %td order_id
-          %td 20303
-        %tr
-          %td severity
-          %td info
-        %tr
           %td log contains
           %td
-        %tr
-          %td request start
-          %td
-        %tr
-          %td request end
-          %td
+            %input.text#contains{:type => "text"}
     %p
   .group
-    %h3 Status
+    %h3 Query Status
     %p
-    Query Timestamp:
+    #query_time.status
     %p
-    #query_time
-    %p
-    Total Records:
-    #record_count
+    #record_count.status
 .right
   .group
     %h3 Listing

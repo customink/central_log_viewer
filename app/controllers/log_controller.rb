@@ -1,11 +1,18 @@
-# REVERT BACK TO AVOID LOGGING SELF!!! class LogController < ActionController::Base
 class LogController < ApplicationController
   respond_to :html, :json
-  #@records = collection.find({}, :skip => offset, :limit => count, :sort => [[ '_id', :desc ]])
   def index
+    logger.debug("calling index")
+
     setup
-    query = params[:query] || 'find({}).limit(20)'
-    respond_with(eval('@collection.' + query))
+    query = "@collection.#{params[:query] || 'find_one()'}"
+    if params[:tail] && !query.include?("find_one")
+      # find_one does not support skip. This is only called once
+      count = eval("#{query}.count()")
+      skip = count <= 20 ? 0 : count - 20
+      query = "#{query}.skip(#{skip}) "
+    end
+
+    respond_with(eval(query))
   end
 
   def apps

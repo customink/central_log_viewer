@@ -144,7 +144,8 @@ body {
   font: 13px arial, helvetica, clean, sans-serif;
   margin: 0 auto;
   padding-left: 5px;
-  line-height: 1.5; }
+  line-height: 1.5;
+  overflow: hidden; }
 
 h1 {
   color: #ff7700;
@@ -172,11 +173,21 @@ td, th {
   padding: 0px 5px 0px 5px; }
 
 textarea {
-  width: 600px; }
+  width: 600px;
+  margin-bottom: 5px; }
 
-input buttor {
-  cursor: pointer;
-  vertical-align: top; }
+#progress {
+  background-image: url("../images/progress.gif");
+  width: 16px;
+  height: 16px;
+  display: none; }
+
+.text {
+  width: 60px;
+  height: 10px; }
+
+.button {
+  margin-left: 105px; }
 
 .group {
   border: 2px solid #333366;
@@ -202,3 +213,10 @@ input buttor {
 .label {
   width: 100px;
   float: left; }
+
+.iframe {
+  height: 800px;
+  overflow: auto; }
+
+.status {
+  margin-left: 3px; }

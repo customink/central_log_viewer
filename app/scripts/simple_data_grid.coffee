@@ -2,7 +2,7 @@ String::splitTrim = ->
   ($.trim f for f in this.split ',')
 
 class window.SimpleDataGrid
-  default_head_data: ["id", "messages", "action", "request_time", "controller"]
+  default_head_data: ["request_time", "application_name", "controller", "action", "runtime", "messages"]
   rel_to_msg_mapping:
     id: "{{id_to_s}}",
     action: "{{../../action}}",
@@ -16,13 +16,13 @@ class window.SimpleDataGrid
     runtime: "{{../../runtime}}",
     url: "{{../../url}}"
   header_source: '<thead><tr>{{#.}}<th>{{.}}</th>{{/.}}</tr></thead>'
-  data_source: '''<tbody id="data_grid_body">{{#.}}{{#messages}}
+  data_source: '''{{#.}}{{#messages}}
                     {{#info}}{{> record}}{{/info}}
                     {{#debug}}{{> record}}{{/debug}}
                     {{#error}}{{> record}}{{/error}}
                     {{#warn}}{{> record}}{{/warn}}
                     {{#fatal}}{{> record}}{{/fatal}}
-                  {{/messages}}{{/.}}</tbody>'''
+                  {{/messages}}{{/.}}'''
 
   constructor: (@listing_table, fields, @data) ->
     if fields?
@@ -46,7 +46,7 @@ class window.SimpleDataGrid
     @templates =
       header: Handlebars.compile @header_source
       data: Handlebars.compile @data_source
-      record_source: Handlebars.compile '<tr id="asdf">{{#map_to_relative}}<td>{{.}}</td>{{/map_to_relative}}</tr>'
+      record_source: Handlebars.compile '<tr id="id">{{#map_to_relative}}<td>{{.}}</td>{{/map_to_relative}}</tr>'
     @create_record_template @fields
 
   map_to_relative: (context, fn) ->
@@ -58,7 +58,7 @@ class window.SimpleDataGrid
         fn "#{@rel_to_msg_mapping[f]}"
 
   create_record_template: (fields) ->
-    source = @templates.record_source fields
+    source = @templates.record_source(fields).replace '"id"', "\"#{@rel_to_msg_mapping["id"]}\""
     Handlebars.registerPartial "record", source
 
   refresh_data: (@data, fields) ->
@@ -77,5 +77,24 @@ class window.SimpleDataGrid
       @listing_table.empty()
       @listing_table.append @templates.header(@fields)
       #TODO: See how to add helper to this by inspecting
-      @listing_table.append @templates.data(@data)
-      @record_count = $('#data_grid_body').children(0).length
+      @listing_table.append "<tbody id=\"data_grid_body\">#{@templates.data(@data)}</tbody>"
+      @tbody = $('#data_grid_body')
+      if @data.length?
+        @record_count = data.length
+        @last_pk = @data[@record_count - 1]["_id"]["$oid"]
+      else
+        # single records are objects, not arrays
+        @record_count = 1
+        @last_pk = @data["_id"]["$oid"]
+
+  append_data: (@data) ->
+    html = @templates.data(@data)
+    @tbody.append html
+    @last_pk = @data[@data.length - 1]["_id"]["$oid"]
+    @record_count += @data.length
+
+  empty: ->
+    @listing_table.empty()
+    @last_pk = null
+    @record_count = 0
+    @data = null
