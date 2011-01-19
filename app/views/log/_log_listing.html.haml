@@ -1,7 +1,7 @@
 - content_for :head do
   = javascript_include_tag "handlebars"
   = coffee_script_bundle
-.iframe
+.iframe#log_div
   %table#log_listing
 = javascript_tag do
   var query_url = '#{url_for(:action => "index")}';

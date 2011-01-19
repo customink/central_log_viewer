@@ -11,7 +11,11 @@ class window.MongoQueryBuilder
     @order_id_template = Handlebars.compile ':params.id => "{{.}}"'
     # TODO: need to change actual find to only return debug messages
     @severity_template = Handlebars.compile '"messages.{{.}}" => {"$exists" => true}'
-    @contains_template = Handlebars.compile '"messages.{{severity}}" => /{{contains}}/'
+    @contains_template = Handlebars.compile '''"$or" => [{"messages.info" => /{{.}}/},
+                                                         {"messages.debug" => /{{.}}/},
+                                                         {"messages.error" => /{{.}}/},
+                                                         {"messages.warn" => /{{.}}/},
+                                                         {"messages.fatal" => /{{.}}/}]'''
     @tail_template = Handlebars.compile '"_id" => { "$gt" =>BSON::ObjectId("{{.}}") }'
     @templates =
       application: [@app_template, null]
@@ -28,6 +32,9 @@ class window.MongoQueryBuilder
 
   set_tail_filter: (value) ->
     @add_filter 'tail', value
+
+  set_contains_filter: (value) ->
+    @add_filter 'contains', value
 
   clear_filters: ->
     for own key, value of @templates

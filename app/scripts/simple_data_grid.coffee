@@ -2,7 +2,7 @@ String::splitTrim = ->
   ($.trim f for f in this.split ',')
 
 class window.SimpleDataGrid
-  default_head_data: ["request_time", "application_name", "controller", "action", "runtime", "messages"]
+  default_head_data: ["id", "request_time", "application_name", "controller", "action", "runtime", "messages"]
   rel_to_msg_mapping:
     id: "{{id_to_s}}",
     action: "{{../../action}}",
@@ -79,19 +79,20 @@ class window.SimpleDataGrid
       #TODO: See how to add helper to this by inspecting
       @listing_table.append "<tbody id=\"data_grid_body\">#{@templates.data(@data)}</tbody>"
       @tbody = $('#data_grid_body')
-      if @data.length?
-        @record_count = data.length
-        @last_pk = @data[@record_count - 1]["_id"]["$oid"]
-      else
-        # single records are objects, not arrays
-        @record_count = 1
-        @last_pk = @data["_id"]["$oid"]
+      @update_grid_metadata(0)
 
   append_data: (@data) ->
-    html = @templates.data(@data)
-    @tbody.append html
-    @last_pk = @data[@data.length - 1]["_id"]["$oid"]
-    @record_count += @data.length
+    @tbody.append @templates.data(@data)
+    @update_grid_metadata(@record_count)
+
+  update_grid_metadata: (previous_length) ->
+    if @data.length?
+      @record_count = previous_length + @data.length
+      @last_pk = if @record_count is 0 then null else @data[@data.length - 1]["_id"]["$oid"]
+    else
+      # single records are objects, not arrays
+      @record_count = previous_length + 1
+      @last_pk = @data["_id"]["$oid"]
 
   empty: ->
     @listing_table.empty()

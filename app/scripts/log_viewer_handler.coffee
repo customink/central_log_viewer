@@ -4,16 +4,18 @@ String::trimToNull = ->
 
 class window.LogViewerHandler
   constructor: (@data_url, @app_url) ->
-    @tail_frequency = 5000
+    @tail_frequency = 1000
     @listing_table = $('#log_listing')
     @query_button = $('#run_query')
     @clear_button = $('#clear_log_listing')
+    @contains_button = $('#contains')
     @fields_input = $('#fields')
     @query_input = $('#query')
     @query_time = $('#query_time')
     @tail_checkbox = $('#tail')
     @record_count = $('#record_count')
     @progress_bar = $('#progress')
+    @log_div = $('#log_div')
 
     @data_grid = new SimpleDataGrid @listing_table, @fields_input.val().trimToNull()
     @application_checkbox = new CheckboxGroup('application_filter', (data) => @app_filter_button_clicked(data))
@@ -25,6 +27,7 @@ class window.LogViewerHandler
   bind_controls: ->
     @query_button.bind 'click', (event) => @query_button_clicked()
     @clear_button.bind 'click', (event) => @clear_button_clicked()
+    @contains_button.bind 'change', (event) => @contains_button_change(event)
 
   init_controls: ->
     $.getJSON(@app_url, (data) => @application_checkbox.create(data))
@@ -47,6 +50,7 @@ class window.LogViewerHandler
 
   tail_grid: (data, query, start) ->
     @data_grid.append_data data
+    @log_div.animate {scrollTop: @log_div.attr("scrollHeight")}, 250
     @requery_decision start
 
   refresh_grid: (data, query, start) ->
@@ -69,9 +73,14 @@ class window.LogViewerHandler
 
   clear_button_clicked: ->
     @data_grid.empty()
-    @query_builder.clear_filters()
+
+  contains_button_change: (event) ->
+    val = @contains_button.val().trimToNull()
+    @query_builder.set_contains_filter val
+    @query_input.val @query_builder.generate()
 
   # callback from checkbox group instance
   app_filter_button_clicked: (data) ->
+    data = null if data.length is 0
     @query_builder.set_application_filter data
     @query_input.val @query_builder.generate()

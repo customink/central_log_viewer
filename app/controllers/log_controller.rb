@@ -1,3 +1,5 @@
+TAIL_RECORDS = 40
+
 class LogController < ApplicationController
   respond_to :html, :json
   def index
@@ -8,7 +10,7 @@ class LogController < ApplicationController
     if params[:tail] && !query.include?("find_one")
       # find_one does not support skip. This is only called once
       count = eval("#{query}.count()")
-      skip = count <= 20 ? 0 : count - 20
+      skip = count <= TAIL_RECORDS ? 0 : count - TAIL_RECORDS
       query = "#{query}.skip(#{skip}) "
     end
 
