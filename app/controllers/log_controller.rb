@@ -19,11 +19,11 @@ class LogController < ApplicationController
 
   def apps
     setup
-    respond_with(@db.command({:distinct => "development_log", :key => "application_name"}) )
+    respond_with(@db.command({:distinct => logger.mongo_collection_name, :key => "application_name"}) )
   end
 
   def setup
-    @db = Rails.logger.mongo_connection
+    @db = logger.mongo_connection
     @collection = @db[logger.mongo_collection_name]
   end
 end
