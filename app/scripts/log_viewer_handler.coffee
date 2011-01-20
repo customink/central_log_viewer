@@ -50,7 +50,6 @@ class window.LogViewerHandler
 
   tail_grid: (data, query, start) ->
     @data_grid.append_data data
-    @log_div.animate {scrollTop: @log_div.attr("scrollHeight")}, 250
     @requery_decision start
 
   refresh_grid: (data, query, start) ->
@@ -59,6 +58,7 @@ class window.LogViewerHandler
     @requery_decision start
 
   requery_decision: (start) ->
+    @log_div.animate {scrollTop: @log_div.attr("scrollHeight")}, 250
     elapsed = new Date() - start
     @set_status(start, elapsed)
     if @tail_checkbox[0].checked
