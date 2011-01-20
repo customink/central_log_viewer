@@ -2,13 +2,13 @@ TAIL_RECORDS = 40
 
 class LogController < ApplicationController
   respond_to :html, :json
-  def index
-    logger.debug("calling index")
 
+  def index
     setup
     query = "@collection.#{params[:query] || 'find_one()'}"
     if params[:tail] && !query.include?("find_one")
-      # find_one does not support skip. This is only called once
+      # find_one does not support skip.
+      # The skip is only used the first time someone requests tail
       count = eval("#{query}.count()")
       skip = count <= TAIL_RECORDS ? 0 : count - TAIL_RECORDS
       query = "#{query}.skip(#{skip}) "
