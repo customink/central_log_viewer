@@ -86,13 +86,13 @@ class window.SimpleDataGrid
     @update_grid_metadata(@record_count)
 
   update_grid_metadata: (previous_length) ->
-    if @data.length?
-      @record_count = previous_length + @data.length
-      @last_pk = if @record_count is 0 then null else @data[@data.length - 1]["_id"]["$oid"]
-    else
-      # single records are objects, not arrays
+    unless @data.length?
+      # single records are objects, not arrays so length doesn't exist
       @record_count = previous_length + 1
       @last_pk = @data["_id"]["$oid"]
+    else if @data.length isnt 0
+      @record_count = previous_length + @data.length
+      @last_pk = @data[@data.length - 1]["_id"]["$oid"]
 
   empty: ->
     @listing_table.empty()
