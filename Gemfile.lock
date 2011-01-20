@@ -1,17 +1,9 @@
-PATH
-  remote: ../bistro_car
+GIT
+  remote: git://github.com/astupka/bistro_car.git
+  revision: e36a28814a5b0d6b94011875da8fc7c6a8f4be7a
   specs:
     bistro_car (0.1.1)
       jsmin (>= 1.0.1)
-
-PATH
-  remote: ../central_logger
-  specs:
-    central_logger (0.3.0)
-      bson_ext
-      bundler (~> 1.0.0)
-      mongo
-      rake
 
 GEM
   remote: http://rubygems.org/
@@ -45,9 +37,14 @@ GEM
     activesupport (3.0.0)
     arel (1.0.1)
       activesupport (~> 3.0.0)
-    bson (1.1.4)
-    bson_ext (1.1.4)
+    bson (1.2.0)
+    bson_ext (1.2.0)
     builder (2.1.2)
+    central_logger (0.3.0)
+      bson_ext
+      bundler (~> 1.0.0)
+      mongo
+      rake
     erubis (2.6.6)
       abstract (>= 1.0.0)
     haml (3.0.24)
@@ -62,8 +59,8 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
-    mongo (1.1.4)
-      bson (>= 1.1.1)
+    mongo (1.2.0)
+      bson (>= 1.2.0)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -94,7 +91,7 @@ PLATFORMS
 
 DEPENDENCIES
   bistro_car!
-  central_logger!
+  central_logger
   haml
   jquery-rails
   rails

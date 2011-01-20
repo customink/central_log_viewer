@@ -6,9 +6,10 @@ gem 'rails'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
-gem "central_logger", :require => "central_logger", :path => "../central_logger"
+gem "central_logger"
 gem "haml"
-gem "bistro_car", :require => "bistro_car", :path => "../bistro_car"
+# fork that removes double response in Rails 3
+gem "bistro_car", :git => "git://github.com/astupka/bistro_car.git"
 gem "jquery-rails"
 
 # Use unicorn as the web server
