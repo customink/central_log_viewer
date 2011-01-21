@@ -1,7 +1,7 @@
 - content_for :log_listing do
   = render :partial => "log_listing"
 .top
-  %h1 Log Viewer
+  %h1 Central Log Viewer
   .label Listing Fields:
   %textarea#fields
   %p
@@ -27,9 +27,13 @@
         %th Value
       %tbody
         %tr
-          %td log contains
+          %td Msg Contains
           %td
             %input.text#contains{:type => "text"}
+        %tr
+          %td Tail Lines
+          %td
+            %input.text#tail_lines{:type => "text"}
     %p
   .group
     %h3 Query Status

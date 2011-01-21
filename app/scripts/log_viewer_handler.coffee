@@ -5,6 +5,7 @@ String::trimToNull = ->
 class window.LogViewerHandler
   constructor: (@data_url, @app_url) ->
     @tail_frequency = 1000
+    @default_tail_lines = 30
     @listing_table = $('#log_listing')
     @query_button = $('#run_query')
     @clear_button = $('#clear_log_listing')
@@ -13,6 +14,7 @@ class window.LogViewerHandler
     @query_input = $('#query')
     @query_time = $('#query_time')
     @tail_checkbox = $('#tail')
+    @tail_lines = $('#tail_lines')
     @record_count = $('#record_count')
     @progress_bar = $('#progress')
     @log_div = $('#log_div')
@@ -31,6 +33,7 @@ class window.LogViewerHandler
 
   init_controls: ->
     $.getJSON(@app_url, (data) => @application_checkbox.create(data))
+    @tail_lines.val(@default_tail_lines)
 
   query_button_clicked: ->
     @data_grid.empty()
@@ -38,8 +41,18 @@ class window.LogViewerHandler
     if query?
       start = new Date()
       @progress_bar.css('display', 'inline-block')
-      params = if @tail_checkbox[0].checked then {query: query, tail: 1} else {query: query}
+      params = {query: query, tail: @calculate_tail()}
       $.getJSON(@data_url, params, (data) => @refresh_grid(data, query, start))
+
+  calculate_tail: ->
+    tail_lines = @tail_lines.val().trimToNull()
+    tail_checkbox = @tail_checkbox[0].checked
+    if tail_lines is null and not tail_checkbox
+      0 # display everything
+    else if tail_lines is null
+      @default_tail_lines
+    else
+      tail_lines
 
   requery: (start) ->
     setTimeout((() =>
