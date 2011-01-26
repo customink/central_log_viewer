@@ -1,7 +1,8 @@
 # template
 development: &config
-  mongo:
-    database: localhost
+  host: production_log.somesite.com
+  database: database
+  collection: production_log
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

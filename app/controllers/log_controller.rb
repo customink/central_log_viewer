@@ -2,8 +2,8 @@ class LogController < ApplicationController
   respond_to :html, :json
 
   def index
-    setup
-    query = "@collection.#{params[:query] || 'find_one()'}"
+    collection = Mongo.db[Mongo.collection]
+    query = "collection.#{params[:query] || 'find_one()'}"
     tail_lines = params[:tail].to_i
 
     if 0 != tail_lines && query.include?(".find(")
@@ -19,12 +19,6 @@ class LogController < ApplicationController
   end
 
   def apps
-    setup
-    respond_with(@db.command({:distinct => logger.mongo_collection_name, :key => "application_name"}) )
-  end
-
-  def setup
-    @db = logger.mongo_connection
-    @collection = @db[logger.mongo_collection_name]
+    respond_with(Mongo.db.command({:distinct => Mongo.collection, :key => "application_name"}) )
   end
 end
