@@ -14,7 +14,13 @@ module Mongo
       config = { 'host' => 'localhost',
                  'port' => '27017' }.merge(config)
       @collection = config["collection"]
-      Mongo::Connection.new(config['host'], config['port'], :auto_reconnect => true).db(config['database'])
+      db = Mongo::Connection.new(config['host'], config['port'], :auto_reconnect => true).db(config['database'])
+
+      if config['username'] && config['password']
+        # the driver stores credentials in case reconnection is required
+        db.authenticate(config['username'], config['password'])
+      end
+      db
     end
   end
 end
