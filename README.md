@@ -33,6 +33,11 @@ The central log viewer provides a straightforward interface for viewing log data
 2. Other parameters in a logged request can be specified using the "<code>params.&lt;key&gt;</code>" format.
 3. Checking Tail -f will execute the query every second, appending a <code>{"_id" => {"$gt" => ObjectId("last_object_id")}}</code> clause to the query
 
+# Log Viewer Authentication
+If you want to enable HTTP Digest Authentication then
+1. cp config/auth.yml.sample config/auth.yml
+2. Edit the username and password in it according to your needs
+
 # Code Overview
 
 This is a Rails 3 application that uses the central_logger gem to configure the mongo driver.  A single trivial controller eval()'s the find
