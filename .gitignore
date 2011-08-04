@@ -18,8 +18,10 @@ coverage
 rdoc
 pkg
 .bundle
+.idea
 
 ## PROJECT::SPECIFIC
 *.log
 /tmp
 config/database.yml
+config/auth.yml
