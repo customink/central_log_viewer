@@ -18,7 +18,6 @@ coverage
 rdoc
 pkg
 .bundle
-.idea
 
 ## PROJECT::SPECIFIC
 *.log
