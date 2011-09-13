@@ -1,0 +1,13 @@
+# template
+development: &config
+  is_enabled: false
+  username: admin
+  password: admin
+
+test:
+  <<: *config
+
+production:
+  is_enabled: true
+  username: my_funky_username
+  password: my_super_secret_password

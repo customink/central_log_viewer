@@ -1,4 +1,4 @@
-class LogController < ApplicationController
+class LogController < AdminController
   respond_to :html, :json
 
   def index
