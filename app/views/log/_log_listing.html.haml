@@ -1,10 +1,9 @@
 - content_for :head do
   = javascript_include_tag "handlebars"
-  = coffee_script_bundle
 .iframe#log_div
   %table#log_listing
 = javascript_tag do
   var query_url = '#{url_for(:action => "index")}';
   var app_url = '#{url_for(:action => "apps")}';
-= coffee_script do
-  $(document).ready -> grid = new LogViewerHandler query_url, app_url
+= javascript_tag do
+  $(function() { var grid = new LogViewerHandler(query_url, app_url); });

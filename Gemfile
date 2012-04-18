@@ -1,17 +1,23 @@
 source 'http://rubygems.org'
 
-gem 'rails'
+RAILS_VERSION = '3.2.3'
+%w(actionpack railties).each {|r| gem r, RAILS_VERSION}
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem "haml"
-# fork that removes double response in Rails 3
-gem "bistro_car", :git => "git://github.com/astupka/bistro_car.git"
 gem "jquery-rails"
 gem "mongo"
 gem "bson_ext"
+gem "tzinfo"
+
+group :assets do
+  gem 'sass-rails', '~> 3.2.4'
+  gem 'coffee-rails'
+  gem 'uglifier'
+end
 
 # Use unicorn as the web server
 # gem 'unicorn'
