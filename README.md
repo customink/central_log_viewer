@@ -10,11 +10,10 @@ The central log viewer provides a straightforward interface for viewing log data
 # Installation
 
 1. git clone git://github.com/customink/central_log_viewer.git
-2. brew install coffee-script # 1.0 is required
-3. cd central_log_viewer
-4. cp config/database.yml.sample config/database.yml
-5. Configure database.yml to point to your mongo db log.  See the [central_logger](http://github.com/customink/central_logger) README for configuration options and defaults.
-6. bundle install
+2. cd central_log_viewer
+3. cp config/database.yml.sample config/database.yml
+4. Configure database.yml to point to your mongo db log.  See the [central_logger](http://github.com/customink/central_logger) README for configuration options and defaults.
+5. bundle install
 
 # Usage
 
@@ -44,8 +43,6 @@ several CoffeeScript classes in app/scripts.
 * Ruby 1.9.2 (rvm recommended)
 * Git 1.6+
 * Bundler 1.0+ for dependency management
-* CoffeeScript 1.0 (Node.js dep)
-* bistro_car
 * haml/sass
 
 # Deployment
